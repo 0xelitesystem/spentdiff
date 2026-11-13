@@ -250,7 +250,7 @@ Other things in this catalog that read the same transcripts, if you want one pie
 
 ## License
 
-MIT. Copyright (c) 2026 0xelitesystem. See [LICENSE](LICENSE).
+MIT. Copyright (c) 2026 RBL Industries LLC. See [LICENSE](LICENSE).
 
 ## Third-party notices
 

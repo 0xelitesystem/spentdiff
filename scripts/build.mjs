@@ -1505,7 +1505,7 @@ export function build(opts = {}) {
   if (fs.existsSync(versionPath)) overrides.set(versionPath, versionModuleSource(fs.readFileSync(versionPath, 'utf8'), version));
   const res = bundle({ entry, target: 'node', root, overrides, minify: opts.minify, mangle: opts.mangle });
   const banner = '#!/usr/bin/env node\n' +
-    '// auditrail ' + version + '. Copyright (c) 2026 0xelitesystem. MIT License.\n' +
+    '// auditrail ' + version + '. Copyright (c) 2026 RBL Industries LLC. MIT License.\n' +
     '// Single-file build: zero runtime dependencies, no network code. Source: https://github.com/0xelitesystem/auditrail\n' +
     '// Bundled: a glyph atlas pre-rasterized from the Inter typeface.\n' +
     '// Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)\n' +
@@ -1543,7 +1543,7 @@ export function build(opts = {}) {
 export const REQUIRED_HTML_NOTICES = Object.freeze([
   ['Inter copyright', 'Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)'],
   ['SIL OFL reference', 'SIL Open Font License, Version 1.1'],
-  ['MIT copyright', 'Copyright (c) 2026 0xelitesystem. MIT License.'],
+  ['MIT copyright', 'Copyright (c) 2026 RBL Industries LLC. MIT License.'],
   ['independence statement', 'not affiliated with, endorsed by or sponsored by'],
 ]);
 
