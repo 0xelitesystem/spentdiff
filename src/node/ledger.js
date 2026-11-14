@@ -1,8 +1,8 @@
-// The numbers-only ledger (DESIGN 8.9, I12, trap 9): `auditrail remember`, opt-in only.
+// The numbers-only ledger (DESIGN 8.9, I12, trap 9): `spentdiff remember`, opt-in only.
 //
 // Claude Code deletes transcripts after 30 days by default. The ledger keeps the NUMBERS so a
 // card made months later still covers the whole run:
-// - Location: ~/.auditrail/ledger/v1/YYYY-MM.json, written only by `remember` (the sandbox
+// - Location: ~/.spentdiff/ledger/v1/YYYY-MM.json, written only by `remember` (the sandbox
 //   grants write access to that folder for that command only).
 // - Unit: (local day, first 16 hex of SHA-256(sessionId)). Per unit: token rows per
 //   (model, file class, fast, US geo, hashed project key) with responses, incomplete, input,
@@ -31,14 +31,14 @@ import { sha256HexPrefix } from '../core/sha256.js';
 import { OUTPUT_FILE_MODE, OUTPUT_DIR_MODE } from './report.js';
 
 export const LEDGER_SCHEMA = 1;
-export const LEDGER_KIND = 'auditrail.ledger';
+export const LEDGER_KIND = 'spentdiff.ledger';
 
 /**
  * @param {string} home
- * @returns {string} ~/.auditrail/ledger/v1
+ * @returns {string} ~/.spentdiff/ledger/v1
  */
 export function ledgerDir(home) {
-  return path.join(home, '.auditrail', 'ledger', 'v1');
+  return path.join(home, '.spentdiff', 'ledger', 'v1');
 }
 
 /* ------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ export function activeMsByDay(tsList, idleSeconds, tz) {
 /**
  * @typedef {Object} LedgerMonth
  * @property {1} schema
- * @property {'auditrail.ledger'} kind
+ * @property {'spentdiff.ledger'} kind
  * @property {string} month
  * @property {string} tz
  * @property {number} idleMinutes
@@ -565,5 +565,5 @@ export function ledgerTotals(dir) {
  * @returns {string}
  */
 export function hookSnippet() {
-  return JSON.stringify({ hooks: { SessionEnd: [{ hooks: [{ type: 'command', command: 'npx auditrail remember' }] }] } }, null, 2);
+  return JSON.stringify({ hooks: { SessionEnd: [{ hooks: [{ type: 'command', command: 'npx spentdiff remember' }] }] } }, null, 2);
 }

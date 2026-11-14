@@ -112,7 +112,7 @@ export function costStateRatios(acc) {
 }
 
 /**
- * `auditrail audit`: receipts, counts and money only (no names, no paths).
+ * `spentdiff audit`: receipts, counts and money only (no names, no paths).
  * @param {{
  *   acc: import('../core/accounting/contract.js').AccountingResult,
  *   prices: { fetched: string, source: string, models: unknown[] },
@@ -157,7 +157,7 @@ export function auditLines(o) {
   out.push('price table');
   const ageDays = Math.max(0, Math.floor((o.nowMs - Date.parse(asOf + 'T00:00:00Z')) / 86_400_000));
   out.push('  anthropic list prices as of ' + asOf + ' (' + fmtInt(o.prices.models.length) + ' models, ' + ageDays + ' days old), applied to all dates; source ' + o.prices.source);
-  if (ageDays > 180) out.push('  price table is ' + ageDays + ' days old; update auditrail');
+  if (ageDays > 180) out.push('  price table is ' + ageDays + ' days old; update spentdiff');
 
   const cs = costStateRatios(acc);
   out.push('cost-state cross-check (audit only, never added to totals)');
@@ -278,8 +278,8 @@ export function exportMarkdown(summary, by) {
   const r = summary.insights.i14.data;
   const i09 = summary.insights.i09.data;
   const out = [];
-  out.push('# Auditrail activity receipts', '');
-  out.push('Generated ' + summary.generatedAt + ' by auditrail ' + summary.tool.version + '.', '');
+  out.push('# Spentdiff activity receipts', '');
+  out.push('Generated ' + summary.generatedAt + ' by spentdiff ' + summary.tool.version + '.', '');
   out.push('| Receipt | Count |', '|---|---:|');
   const add = (k, v) => out.push('| ' + mdCell(k) + ' | ' + mdCell(v) + ' |');
   add('Active days (local days with at least one prompt)', fmtInt(r.activeDays));
@@ -311,7 +311,7 @@ export function exportMarkdown(summary, by) {
 /** What replaces the I11 secret findings in an export file. */
 export const EXPORT_SECRETS_NOTE =
   'Secret findings are not exported. They are shown only in the local HTML report, which carries ' +
-  'its own warning, and located only by `auditrail secrets --locations`.';
+  'its own warning, and located only by `spentdiff secrets --locations`.';
 
 /**
  * Strip the I11 secret findings out of a Summary copy for export.

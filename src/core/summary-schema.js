@@ -16,7 +16,7 @@ import { INSIGHT_IDS } from './insights/contract.js';
 import { FILE_CLASSES } from './adapters/contract.js';
 
 export const SUMMARY_SCHEMA = 1;
-export const SUMMARY_KIND = 'auditrail.summary';
+export const SUMMARY_KIND = 'spentdiff.summary';
 
 /**
  * @typedef {Object} SummaryPricing
@@ -64,8 +64,8 @@ export const SUMMARY_KIND = 'auditrail.summary';
 /**
  * @typedef {Object} Summary
  * @property {1} schema
- * @property {'auditrail.summary'} kind
- * @property {{ name: 'auditrail', version: string }} tool
+ * @property {'spentdiff.summary'} kind
+ * @property {{ name: 'spentdiff', version: string }} tool
  * @property {string} generatedAt   ISO UTC
  * @property {string} tz            IANA zone used for every local bucket
  * @property {number} idleMinutes
@@ -124,7 +124,7 @@ export function checkSummary(summary) {
   if (bad) p.push('not JSON-safe at ' + bad);
   if (s.schema !== SUMMARY_SCHEMA) p.push('schema must be ' + SUMMARY_SCHEMA);
   if (s.kind !== SUMMARY_KIND) p.push('kind must be ' + SUMMARY_KIND);
-  if (!s.tool || s.tool.name !== 'auditrail' || typeof s.tool.version !== 'string') p.push('tool must be { name: "auditrail", version }');
+  if (!s.tool || s.tool.name !== 'spentdiff' || typeof s.tool.version !== 'string') p.push('tool must be { name: "spentdiff", version }');
   if (typeof s.generatedAt !== 'string' || !ISO_RE.test(s.generatedAt)) p.push('generatedAt must be ISO UTC');
   if (typeof s.tz !== 'string' || !s.tz) p.push('tz must be a non-empty string');
   if (typeof s.idleMinutes !== 'number' || !(s.idleMinutes > 0)) p.push('idleMinutes must be a positive number');

@@ -292,15 +292,15 @@ export function dateRange(since, until, tz) {
   return { since: s, until: u };
 }
 
-export const HELP = `auditrail: the audit trail your coding agents already wrote, priced, ranked and scanned. Runs 100% locally.
+export const HELP = `spentdiff: prices your coding-agent sessions at list, ranks what to fix, scans for leaked secrets. Runs 100% locally.
 
 Usage
-  auditrail                      scan, write the HTML report, open it
-  auditrail card                 write the share card PNG (--size landscape|portrait, --theme dark|light)
-  auditrail audit [--methods]    receipts: files, lines, responses, dedup effect, prices, cross-checks
-  auditrail export --csv|--json|--md [--by day|month|model|project]
-  auditrail remember             update the numbers-only ledger (opt-in history rescue)
-  auditrail secrets --locations  terminal-only list of where secret findings are stored
+  spentdiff                      scan, write the HTML report, open it
+  spentdiff card                 write the share card PNG (--size landscape|portrait, --theme dark|light)
+  spentdiff audit [--methods]    receipts: files, lines, responses, dedup effect, prices, cross-checks
+  spentdiff export --csv|--json|--md [--by day|month|model|project]
+  spentdiff remember             update the numbers-only ledger (opt-in history rescue)
+  spentdiff secrets --locations  terminal-only list of where secret findings are stored
 
 Options
   --dir <path>          scan this projects folder instead of the default (repeatable)

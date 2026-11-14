@@ -1,4 +1,4 @@
-# Auditrail working guide
+# Spentdiff working guide
 
 How to run it, what each command is for, and the situations it was built to answer.
 
@@ -10,7 +10,7 @@ reproduce on your own machine from a clean clone. None of it is anyone's real us
 
 ## 1. What it does
 
-Auditrail reads the session logs your coding agent already writes to disk, prices every model
+Spentdiff reads the session logs your coding agent already writes to disk, prices every model
 response at published API list rates, ranks what to change, scans the transcripts for leaked
 secrets, and writes one HTML report, all on your own machine with no account, no key and no
 network call.
@@ -28,45 +28,45 @@ the evidence expires before anyone looks at it.
 Installed:
 
 ```
-npx auditrail
+npx spentdiff
 ```
 
 From a clone:
 
 ```
 node scripts/gen-synthetic.mjs      # build the synthetic fixtures
-node scripts/build.mjs              # build dist/auditrail.mjs and dist/auditrail.html
-node dist/auditrail.mjs
+node scripts/build.mjs              # build dist/spentdiff.mjs and dist/spentdiff.html
+node dist/spentdiff.mjs
 ```
 
-Node 22 or later. Zero runtime dependencies. `pnpm dlx auditrail` and `bunx auditrail` work too.
+Node 22 or later. Zero runtime dependencies. `pnpm dlx spentdiff` and `bunx spentdiff` work too.
 
 Every command prints the same header first, so you always know what was read before you read any
 number:
 
 ```
-auditrail 0.1.0
+spentdiff 0.2.0
 network: denied by the Node runtime (--permission, no --allow-net)
 scan taken 2026-09-21T21:21:46.859Z
 scanned 856 files (6.5 MB) in 0.4 s, peak memory 80 MB
 0 parse errors, 0 partial trailing lines (sessions still writing)
 responses 6,751, of which 0.0% never recorded final output counts (value is a lower bound)
-report C:\Users\You\.auditrail\reports\auditrail-2026-09-21-1721.html
+report C:\Users\You\.spentdiff\reports\spentdiff-2026-09-21-1721.html
 ```
 
-The report is written to `~/.auditrail/reports/` and opened in your browser. Pass `--no-open` to
+The report is written to `~/.spentdiff/reports/` and opened in your browser. Pass `--no-open` to
 skip the browser, `--out <file>` to choose the path.
 
 The six commands:
 
 | Command | What it writes |
 |---|---|
-| `auditrail` (or `auditrail report`) | one self-contained HTML report, then opens it |
-| `auditrail card` | one PNG share card, plus a manifest of every field the image contains |
-| `auditrail audit [--methods]` | receipts to the terminal: files, lines, responses, dedup, prices, cross-checks |
-| `auditrail export --csv/--json/--md [--by day/month/model/project]` | a file you can hand to a spreadsheet or an invoice |
-| `auditrail remember` | updates a numbers-only ledger so history survives log deletion |
-| `auditrail secrets --locations` | terminal-only list of which files hold each secret finding |
+| `spentdiff` (or `spentdiff report`) | one self-contained HTML report, then opens it |
+| `spentdiff card` | one PNG share card, plus a manifest of every field the image contains |
+| `spentdiff audit [--methods]` | receipts to the terminal: files, lines, responses, dedup, prices, cross-checks |
+| `spentdiff export --csv/--json/--md [--by day/month/model/project]` | a file you can hand to a spreadsheet or an invoice |
+| `spentdiff remember` | updates a numbers-only ledger so history survives log deletion |
+| `spentdiff secrets --locations` | terminal-only list of which files hold each secret finding |
 
 The report itself is fourteen findings. Each one is arithmetic over your logs, with the event
 count behind it and one thing to change:
@@ -103,9 +103,9 @@ subscription receipt and nothing else.
 **What you do.**
 
 ```
-auditrail export --csv --by month
-auditrail export --csv --by project
-auditrail --plan max20x
+spentdiff export --csv --by month
+spentdiff export --csv --by project
+spentdiff --plan max20x
 ```
 
 **What you learn.** `--by month` gives you value per calendar month with a response count beside
@@ -130,7 +130,7 @@ invoice line.
 **What you do.**
 
 ```
-auditrail export --csv --by project --since 2026-07-01 --until 2026-09-30
+spentdiff export --csv --by project --since 2026-07-01 --until 2026-09-30
 ```
 
 Add `--redact` if the CSV is going anywhere you would rather not name folders.
@@ -143,7 +143,7 @@ clients.
 
 **The action it leads to.** Allocate the subscription cost by value share rather than by
 guesswork, and put the method footnote in the invoice notes. If a client disputes it,
-`auditrail audit --methods` reproduces the arithmetic in front of them.
+`spentdiff audit --methods` reproduces the arithmetic in front of them.
 
 ### 4.3 Finding secrets sitting in your transcripts
 
@@ -155,7 +155,7 @@ scanner in your stack is looking at.
 act on:
 
 ```
-auditrail secrets --locations
+spentdiff secrets --locations
 ```
 
 **What you learn.** Sixteen vendor formats are matched: private key PEM blocks, Anthropic, OpenAI,
@@ -236,8 +236,8 @@ window are not evidence.
 **What you do.**
 
 ```
-auditrail export --md
-auditrail card --size portrait --theme dark
+spentdiff export --md
+spentdiff card --size portrait --theme dark
 ```
 
 **What you learn.** The Markdown export is finding i14, activity receipts, as a table you can paste
@@ -283,12 +283,12 @@ quarter's run will have lost this quarter.
 **What you do.** Read finding i12, then turn on the ledger:
 
 ```
-auditrail remember
+spentdiff remember
 ```
 
 **What you learn.** i12 prints your real measured coverage window rather than guessing at it. On
 the shipped fixture: earliest 2026-03-02, latest 2026-08-30, 182 days covered, retention at the
-default. `remember` writes a numbers-only ledger to `~/.auditrail/ledger/v1` and reports what it
+default. `remember` writes a numbers-only ledger to `~/.spentdiff/ledger/v1` and reports what it
 did:
 
 ```
@@ -302,7 +302,7 @@ because a gateway id can carry a cloud account number and is hashed instead.
 
 **The action it leads to.** Run `remember` on a schedule now, not later, because it cannot recover
 what is already gone. The command prints a `SessionEnd` hook you can paste into your Claude Code
-`settings.json` yourself; auditrail never installs it for you. The alternative is raising
+`settings.json` yourself; spentdiff never installs it for you. The alternative is raising
 `cleanupPeriodDays`, which also keeps everything ever pasted into a session, secrets included, on
 disk for that long. The ledger is the safer half of that trade.
 
@@ -315,9 +315,9 @@ the answer depends on how you personally work.
 **What you do.**
 
 ```
-auditrail --plan pro
-auditrail --plan max20x
-auditrail --plan-price 47.50
+spentdiff --plan pro
+spentdiff --plan max20x
+spentdiff --plan-price 47.50
 ```
 
 **What you learn.** The value multiple, computed as total value divided by the number of months
@@ -391,7 +391,7 @@ archetype, badges, coverage, heatmap. The footer cannot be hidden, because it st
 was made and from how many files. Rate-limit windows are the one opt-in extra:
 `--card-include rate-limits`.
 
-**Read the manifest, not the image.** `auditrail card` prints the exact text it drew for every
+**Read the manifest, not the image.** `spentdiff card` prints the exact text it drew for every
 field. That list is generated from the same allowlisted object the renderer draws from, so it
 cannot under-report. If something you did not expect is on the card, it is in the manifest.
 
@@ -465,14 +465,14 @@ the header pin which scan produced which number, and both travel in every export
 
 **A permission error on Node 25 or later.** The scanner re-executes itself as a child under the Node
 permission model with a narrow allowlist. If your log folder is a symlink or sits somewhere
-unusual, the child can be denied a path the parent resolved. Run `auditrail --print-sandbox` to see
+unusual, the child can be denied a path the parent resolved. Run `spentdiff --print-sandbox` to see
 the exact child command and which `--allow-fs-read` paths it was given, without running it.
 
 **`secrets` refuses to run.** By design. It needs `--locations`, because it is the one command that
 prints file paths and line numbers for secret findings to your terminal.
 
 **The report will not open.** Pass `--no-open` and open the file yourself from
-`~/.auditrail/reports/`. It is one self-contained HTML file with a `default-src 'none'` policy, so
+`~/.spentdiff/reports/`. It is one self-contained HTML file with a `default-src 'none'` policy, so
 it works from `file://` with the network off.
 
 ## 8. How to verify the numbers yourself
@@ -481,9 +481,9 @@ it works from `file://` with the network off.
 `node scripts/build.mjs`:
 
 ```
-node dist/auditrail.mjs audit --methods --dir test/fixtures/showcase/power-user/projects
-node dist/auditrail.mjs export --md --by month --dir test/fixtures/showcase/power-user/projects
-node dist/auditrail.mjs card --dir test/fixtures/showcase/power-user/projects --size portrait
+node dist/spentdiff.mjs audit --methods --dir test/fixtures/showcase/power-user/projects
+node dist/spentdiff.mjs export --md --by month --dir test/fixtures/showcase/power-user/projects
+node dist/spentdiff.mjs card --dir test/fixtures/showcase/power-user/projects --size portrait
 ```
 
 **Check the arithmetic against a second implementation.** The accounting rules are written twice,
@@ -497,28 +497,28 @@ source URL it came from, on every run. If the table is stale for your period, pa
 **Check that it cannot talk to anything.**
 
 ```
-npm pack auditrail
-tar -xzf auditrail-*.tgz
+npm pack spentdiff
+tar -xzf spentdiff-*.tgz
 grep -rnE "fetch\(|XMLHttpRequest|WebSocket|EventSource|sendBeacon|node:http|node:https|node:net|node:dns|node:tls" package/dist/
 ```
 
-returns nothing. `package/dist/` is the whole tool: `auditrail.mjs` and `auditrail.html`, with no
-third file. Then run `auditrail --print-sandbox` to see the exact child command without running it,
+returns nothing. `package/dist/` is the whole tool: `spentdiff.mjs` and `spentdiff.html`, with no
+third file. Then run `spentdiff --print-sandbox` to see the exact child command without running it,
 open the report with the network tab open, or turn off your wifi and run the whole thing again.
 
 **Check that the package you installed is this source.** The build is deterministic, so the same
 source on the same Node major produces the same bytes:
 
 ```
-npm pack auditrail
-tar -xzf auditrail-*.tgz
-git clone https://github.com/0xelitesystem/auditrail
-cd auditrail && git checkout v0.1.0
+npm pack spentdiff
+tar -xzf spentdiff-*.tgz
+git clone https://github.com/0xelitesystem/spentdiff
+cd spentdiff && git checkout v0.2.0
 node scripts/build.mjs                          # prints the SHA-256 it just built
-shasum -a 256 ../package/dist/auditrail.mjs     # must print the same digest
+shasum -a 256 ../package/dist/spentdiff.mjs     # must print the same digest
 ```
 
-**Check the card cannot leak.** Run `auditrail card` and read the manifest it prints. Then run it
+**Check the card cannot leak.** Run `spentdiff card` and read the manifest it prints. Then run it
 again with `--redact` and confirm the manifest is unchanged, because nothing on the card was ever a
 name.
 

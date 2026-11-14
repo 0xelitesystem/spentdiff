@@ -165,14 +165,14 @@ export function renderReport(summary, o = {}) {
 }
 
 /**
- * Default report file (DESIGN 8.2): ~/.auditrail/reports/auditrail-YYYY-MM-DD-HHMM.html
+ * Default report file (DESIGN 8.2): ~/.spentdiff/reports/spentdiff-YYYY-MM-DD-HHMM.html
  * in local time.
  * @param {string} home
  * @param {Date} [now]
  * @returns {string}
  */
 export function defaultReportPath(home, now = new Date()) {
-  return path.join(home, '.auditrail', 'reports', 'auditrail-' + localStamp(now) + '.html');
+  return path.join(home, '.spentdiff', 'reports', 'spentdiff-' + localStamp(now) + '.html');
 }
 
 /**
@@ -209,7 +209,7 @@ export function uniquePath(p, exists = fs.existsSync) {
  */
 export const OUTPUT_FILE_MODE = 0o600;
 
-/** Mode for the folders this tool creates for its own data (~/.auditrail and below). */
+/** Mode for the folders this tool creates for its own data (~/.spentdiff and below). */
 export const OUTPUT_DIR_MODE = 0o700;
 
 /**
@@ -261,7 +261,7 @@ export function staticReportTemplate(s) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>Auditrail report</title>
+<title>Spentdiff report</title>
 <style>
 :root { --bg: #0a0a0a; --text: #f2f2f2; --accent: #d4ff3a; --secondary: #a3a3a3; --line: #2a2a2a; }
 @media (prefers-color-scheme: light) { :root { --bg: #e8ebef; --text: #0a0a0a; --accent: #2d6b00; --secondary: #4a5260; --line: #c3c9d1; } }
@@ -282,7 +282,7 @@ footer { margin-top: 40px; font-size: 13px; }
 </head>
 <body>
 <main>
-<h1>AUDITRAIL</h1>
+<h1>SPENTDIFF</h1>
 <p class="muted">Generated ${e(s.generatedAt ?? '')} (time zone ${e(s.tz ?? '')}). Scanned ${e(scan.takenAt ?? '')}, ${n(scan.filesRead)} files.</p>
 <p class="banner">${e(banner)}</p>
 <p class="big">${e(valueLine)}</p>

@@ -102,7 +102,7 @@ export function buildSummary(input) {
   const summary = {
     schema: SUMMARY_SCHEMA,
     kind: SUMMARY_KIND,
-    tool: { name: 'auditrail', version: String(input.toolVersion) },
+    tool: { name: 'spentdiff', version: String(input.toolVersion) },
     generatedAt: new Date(options.nowMs).toISOString(),
     tz: options.tz,
     idleMinutes: options.idleMinutes,
@@ -252,12 +252,12 @@ function privateNeedles(acc, redacted) {
  * is the same for every user and never comes from a log, so a private string found only INSIDE
  * one of these phrases is the program's own words, not a leak: under --redact a file labelled
  * ".claude/settings.json" matched the retention advice of I12, and a project called
- * "auditrail" would match the product name. An occurrence that reaches past the phrase, or
+ * "spentdiff" would match the product name. An occurrence that reaches past the phrase, or
  * sits anywhere else, is still reported. The exemption never applies to a label field (the
- * fields checkRedacted() lists): a project literally named "auditrail" is private there.
+ * fields checkRedacted() lists): a project literally named "spentdiff" is private there.
  */
 export const FIXED_COPY = Object.freeze([
-  SUMMARY_KIND, 'auditrail', VALUE_LABEL, CUSTOM_VALUE_LABEL, CUSTOM_VALUE_LABEL_NO_FILE, REDACTED_PRICE_FILE, NOT_PAID_NOTE, REPO_DISPLAY,
+  SUMMARY_KIND, 'spentdiff', VALUE_LABEL, CUSTOM_VALUE_LABEL, CUSTOM_VALUE_LABEL_NO_FILE, REDACTED_PRICE_FILE, NOT_PAID_NOTE, REPO_DISPLAY,
   ...TOOL_DISPLAY_NAMES, ...FILE_CLASSES, ...COMMAND_INTENTS, ...ERROR_CATEGORIES, ...SKIP_REASONS,
   ACTION_PLAN, ACTION_MONEY_MAP, ACTION_IDLE, ACTION_DELEGATION, ACTION_REPRICE, REPRICING_LABEL, ACTION_RATE_LIMITS,
   ...Object.values(TOOL_ACTIONS), ACTION_CHURN, ACTION_PATTERNS, ACTION_WORKFLOWS, ACTION_SECRETS, ' Critical copies on disk: ',

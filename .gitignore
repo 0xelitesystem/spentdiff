@@ -10,8 +10,8 @@ dist/
 !/test/fixtures/**
 
 # Local outputs of the tool itself
-.auditrail/
-auditrail-*.html
+.spentdiff/
+spentdiff-*.html
 card*.png
 !/test/**/card*.png
 

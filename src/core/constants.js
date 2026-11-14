@@ -32,7 +32,7 @@ export function customValueLabel(fileName) {
 export const NOT_PAID_NOTE = 'Not what I paid.';
 
 /** Repository shown in the card footer and report footer (plain text, never fetched). */
-export const REPO_DISPLAY = 'github.com/0xelitesystem/auditrail';
+export const REPO_DISPLAY = 'github.com/0xelitesystem/spentdiff';
 
 /** Default idle cutoff for active time, in minutes (rule A22). */
 export const DEFAULT_IDLE_MINUTES = 15;

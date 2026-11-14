@@ -83,7 +83,7 @@ function freshHome() {
  */
 function runCli(args, o) {
   const env = { ...process.env, HOME: o.home, USERPROFILE: o.home };
-  for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'AUDITRAIL_DEBUG']) delete env[k];
+  for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'SPENTDIFF_DEBUG']) delete env[k];
   const res = spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8', env, timeout: 120_000 });
   return { status: res.status, stdout: res.stdout ?? '', stderr: res.stderr ?? '' };
 }
@@ -267,7 +267,7 @@ test('main: usage errors exit 2 on stderr; --version and --help print and exit 0
 
   c = captureIo();
   assert.equal(await main(['--version'], c.io), 0);
-  assert.deepEqual(c.out, ['auditrail ' + PKG_VERSION]);
+  assert.deepEqual(c.out, ['spentdiff ' + PKG_VERSION]);
 
   c = captureIo();
   assert.equal(await main(['--help'], c.io), 0);
@@ -297,7 +297,7 @@ test('planLaunch: scoped reads, one write, never network, child processes or wor
 test('planLaunch: remember writes only the ledger folder; audit and secrets write nothing', () => {
   const { io } = captureIo();
   const rem = planLaunch(parseCli(['remember', '--dir', PERSONA]), io);
-  const ledger = path.join(io.home, '.auditrail', 'ledger', 'v1');
+  const ledger = path.join(io.home, '.spentdiff', 'ledger', 'v1');
   assert.equal(rem.ledger, ledger);
   assert.deepEqual(rem.writePaths, [ledger]);
   assert.ok(rem.readPaths.includes(ledger));
@@ -322,23 +322,23 @@ test('planLaunch: a missing --dir is reported by position, never by path', () =>
   assert.throws(() => planLaunch(parseCli(['--dir', PERSONA, '--prices', path.join(tempDir(), 'none.json')]), io), UsageError);
 });
 
-test('planLaunch: default outputs go under ~/.auditrail/reports and never overwrite', () => {
+test('planLaunch: default outputs go under ~/.spentdiff/reports and never overwrite', () => {
   const { io } = captureIo();
   const now = io.now();
   const first = defaultOutPath(parseCli([]), io.home, now);
-  assert.ok(first.startsWith(path.join(io.home, '.auditrail', 'reports') + path.sep));
-  assert.match(path.basename(first), /^auditrail-\d{4}-\d{2}-\d{2}-\d{4}\.html$/);
+  assert.ok(first.startsWith(path.join(io.home, '.spentdiff', 'reports') + path.sep));
+  assert.match(path.basename(first), /^spentdiff-\d{4}-\d{2}-\d{2}-\d{4}\.html$/);
   writeFile(first, 'taken');
   const plan = planLaunch(parseCli(['--dir', PERSONA]), io);
   assert.notEqual(plan.out, first);
   assert.match(path.basename(plan.out), /-2\.html$/);
-  assert.match(path.basename(defaultOutPath(parseCli(['card', '--size', 'portrait']), io.home, now)), /^auditrail-card-.*-portrait-dark\.png$/);
-  assert.match(path.basename(defaultOutPath(parseCli(['export', '--csv', '--by', 'month']), io.home, now)), /^auditrail-by-month-.*\.csv$/);
-  assert.match(path.basename(defaultOutPath(parseCli(['export', '--json']), io.home, now)), /^auditrail-summary-.*\.json$/);
+  assert.match(path.basename(defaultOutPath(parseCli(['card', '--size', 'portrait']), io.home, now)), /^spentdiff-card-.*-portrait-dark\.png$/);
+  assert.match(path.basename(defaultOutPath(parseCli(['export', '--csv', '--by', 'month']), io.home, now)), /^spentdiff-by-month-.*\.csv$/);
+  assert.match(path.basename(defaultOutPath(parseCli(['export', '--json']), io.home, now)), /^spentdiff-summary-.*\.json$/);
   assert.equal(defaultOutPath(parseCli(['audit']), io.home, now), null);
 });
 
-test('planLaunch: ~/.auditrail/prices.json and projects.json are granted when present', () => {
+test('planLaunch: ~/.spentdiff/prices.json and projects.json are granted when present', () => {
   const { io } = captureIo();
   const uf = userFiles(io.home);
   writeFile(uf.prices, '{"multiplier":0.5}');
@@ -430,18 +430,18 @@ test('end to end: default flow with --no-open writes a report; terminal output i
   assertNoLogNames(text, 'default flow');
   assertTruthfulStatus(r.stdout);
   const lines = r.stdout.split(/\r?\n/).filter(Boolean);
-  assert.equal(lines[0], 'auditrail ' + PKG_VERSION);
+  assert.equal(lines[0], 'spentdiff ' + PKG_VERSION);
   assert.ok(lines.includes('report ' + out));
   assert.ok(lines.some((l) => /^scanned 92 files \(/.test(l)));
   assert.ok(lines.some((l) => /^responses 323, of which /.test(l)));
   const allowed = [
-    /^auditrail \d/, /^network: /, /^filesystem: /, /^sandbox: /, /^scan taken \d{4}-\d{2}-\d{2}T/,
+    /^spentdiff \d/, /^network: /, /^filesystem: /, /^sandbox: /, /^scan taken \d{4}-\d{2}-\d{2}T/,
     /^scanned \d[\d,]* files \(/, /parse errors/, /^responses \d/, /^report /,
   ];
   for (const l of lines) assert.ok(allowed.some((re) => re.test(l)), 'unexpected terminal line: ' + withoutOwnPaths(l, [outDir, home]));
   assert.ok(!lines.some((l) => /browser/.test(l)), '--no-open must not open anything');
   // The default HOME got nothing but its own (empty) state: no report was written there.
-  assert.ok(!fs.existsSync(path.join(home, '.auditrail', 'reports')));
+  assert.ok(!fs.existsSync(path.join(home, '.spentdiff', 'reports')));
 });
 
 test('end to end: --redact report carries no project name and no canary at all', () => {
@@ -479,7 +479,7 @@ test('end to end: card, audit --methods, export, remember and secrets --location
   // export (default location under the temporary HOME)
   r = runCli(['export', '--csv', '--by', 'project', ...base], { home });
   assert.equal(r.status, 0, r.stderr);
-  const reports = path.join(home, '.auditrail', 'reports');
+  const reports = path.join(home, '.spentdiff', 'reports');
   const csv = fs.readdirSync(reports).filter((n) => n.endsWith('.csv'));
   assert.equal(csv.length, 1);
   assert.match(fs.readFileSync(path.join(reports, csv[0]), 'utf8'), /^project,responses,value_usd,sessions\r\n/);
@@ -488,7 +488,7 @@ test('end to end: card, audit --methods, export, remember and secrets --location
   // remember, twice: the second run refreshes, never duplicates
   r = runCli(['remember', ...base], { home });
   assert.equal(r.status, 0, r.stderr);
-  const ledger = path.join(home, '.auditrail', 'ledger', 'v1');
+  const ledger = path.join(home, '.spentdiff', 'ledger', 'v1');
   const months = fs.readdirSync(ledger).filter((n) => /^\d{4}-\d{2}\.json$/.test(n));
   assert.ok(months.length >= 1);
   const ledgerText = months.map((m) => fs.readFileSync(path.join(ledger, m), 'utf8')).join('\n');
@@ -590,7 +590,7 @@ test('end to end: --print-sandbox prints the child command and scans nothing', (
   assert.match(lines[0], /--allow-fs-write=/);
   assert.ok(lines[0].includes(CHILD_FLAG));
   assert.ok(!/--allow-(net|child-process|worker|addons|wasi)/.test(lines[0]));
-  assert.ok(!fs.existsSync(path.join(home, '.auditrail', 'reports')) || fs.readdirSync(path.join(home, '.auditrail', 'reports')).length === 0);
+  assert.ok(!fs.existsSync(path.join(home, '.spentdiff', 'reports')) || fs.readdirSync(path.join(home, '.spentdiff', 'reports')).length === 0);
 });
 
 test('end to end: no logs found prints a hint and exits 1 without starting a scan', () => {

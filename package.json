@@ -1,10 +1,10 @@
 {
-  "name": "auditrail",
-  "version": "0.1.0",
-  "description": "The audit trail your coding agents already wrote, priced at list, ranked by what to fix, and scanned for leaked secrets, entirely on your own machine. API-equivalent value with receipts, a zero-token fix list and a privacy-safe share card. Runs 100% locally.",
+  "name": "spentdiff",
+  "version": "0.2.0",
+  "description": "Prices your coding-agent sessions at list, ranks what to fix, and scans them for leaked secrets, entirely on your own machine. API-equivalent value with receipts, a zero-token fix list and a privacy-safe share card. Runs 100% locally.",
   "type": "module",
   "bin": {
-    "auditrail": "dist/auditrail.mjs"
+    "spentdiff": "dist/spentdiff.mjs"
   },
   "files": [
     "dist",
@@ -48,11 +48,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/0xelitesystem/auditrail.git"
+    "url": "git+https://github.com/0xelitesystem/spentdiff.git"
   },
-  "homepage": "https://github.com/0xelitesystem/auditrail#readme",
+  "homepage": "https://github.com/0xelitesystem/spentdiff#readme",
   "bugs": {
-    "url": "https://github.com/0xelitesystem/auditrail/issues"
+    "url": "https://github.com/0xelitesystem/spentdiff/issues"
   },
   "publishConfig": {
     "access": "public"

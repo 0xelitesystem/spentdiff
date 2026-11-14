@@ -22,7 +22,7 @@ export const URGENT_COVERAGE_DAYS = 60;
 
 export const RETENTION_LINE = '"cleanupPeriodDays": 3650';
 
-export const ACTION_HISTORY = 'Turn on auditrail remember (numbers only) so later cards still cover the whole run, or add ' + RETENTION_LINE
+export const ACTION_HISTORY = 'Turn on spentdiff remember (numbers only) so later cards still cover the whole run, or add ' + RETENTION_LINE
   + ' to ~/.claude/settings.json, knowing that this also keeps anything pasted into a session, secrets included, on disk that long.';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;

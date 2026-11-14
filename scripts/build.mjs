@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Zero-dependency inliner (DESIGN 8.3, 8.4, 8.8, 8.10a, trap 8).
 //
-// Produces ONE file, dist/auditrail.mjs, that contains:
+// Produces ONE file, dist/spentdiff.mjs, that contains:
 //   - the Node CLI (src/node/cli.js) and every module it imports (core and node code),
 //   - the HTML report template, with the browser app (src/web/app.js), its CSS and the Web
 //     Worker source (src/web/worker.js) inlined, and the meta CSP carrying the SHA-256 of the
@@ -30,12 +30,12 @@
 //    short keys. mangle: false turns these off for comparison runs.
 // 6. The report page the CLI embeds (the built template without the drop-mode worker) is
 //    stored Brotli-compressed inside report.js and checked by SHA-256 when it is unpacked; the
-//    full page, worker included, is written readable to dist/auditrail.html.
+//    full page, worker included, is written readable to dist/spentdiff.html.
 // 7. The package version replaces the version fallback of src/node/cli.js, so a copy of the
 //    bundle without its package.json still knows its version.
 //
 // Usage:
-//   node scripts/build.mjs                  build dist/auditrail.mjs (and dist/auditrail.html)
+//   node scripts/build.mjs                  build dist/spentdiff.mjs (and dist/spentdiff.html)
 //   node scripts/build.mjs --out <file>     choose the bundle path
 //   node scripts/build.mjs --html-only      build only the standalone report/app HTML
 //
@@ -51,7 +51,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(HERE, '..');
 
-/** Size budget for dist/auditrail.mjs (DESIGN 8.3). */
+/** Size budget for dist/spentdiff.mjs (DESIGN 8.3). */
 export const MAX_BUNDLE_BYTES = 400 * 1024;
 
 /** The exact meta CSP (DESIGN 8.8) with the app script hash filled in. */
@@ -1311,7 +1311,7 @@ const WORKER_BLOCK_RE = /(<script type="text\/plain" id="ar-worker">)([\s\S]*?)(
  * The page the CLI writes its reports into: the built template with the ar-worker block left
  * empty. A CLI report always embeds its Summary, so it never enters drop mode and never starts
  * the worker (app.js offers "Scan another folder" only on a dropped report); drop mode lives in
- * the standalone dist/auditrail.html, which keeps the worker. The executable app script,
+ * the standalone dist/spentdiff.html, which keeps the worker. The executable app script,
  * and so the CSP hash, is identical in both pages.
  * @param {string} html  the built template (buildTemplate().html)
  * @returns {string}
@@ -1343,7 +1343,7 @@ export function brotliOptions(size) {
  * Source of src/node/report.js for the Node bundle: the EMBEDDED_TEMPLATE marker becomes a
  * function that returns the built template, and the dev-template import becomes a stub. The
  * template is stored Brotli-compressed and base64 encoded (it is page data, not code the Node
- * process runs, and the same page ships readable as dist/auditrail.html), decompressed with
+ * process runs, and the same page ships readable as dist/spentdiff.html), decompressed with
  * node:zlib only when a report is rendered (the launcher and the other commands never unpack
  * it), and checked against its SHA-256 before use. The glyph atlas is not repeated: the
  * template is split around the ar-glyphs block and joined with the atlas string the bundle
@@ -1375,10 +1375,10 @@ export function templateModuleSource(reportSrc, html, glyphs) {
     reportSrc
       .replace(DEV_TEMPLATE_IMPORT, () => 'const devReportTemplate = () => null;')
       .replace(REPORT_TEMPLATE_MARKER, () => expr) + '\n' +
-    '/* Added by scripts/build.mjs: the report page, stored compressed; see dist/auditrail.html. */\n' +
+    '/* Added by scripts/build.mjs: the report page, stored compressed; see dist/spentdiff.html. */\n' +
     'function __arUnpackTemplate(packed, sha) {\n' +
     "  const t = __arBrotliDecompressSync(Buffer.from(packed, 'base64')).toString('utf8').split(String.fromCharCode(0)).join(__arGlyphAtlas);\n" +
-    "  if (__arCreateHash('sha256').update(t, 'utf8').digest('hex') !== sha) throw new Error('the report page inside this program is damaged; reinstall auditrail');\n" +
+    "  if (__arCreateHash('sha256').update(t, 'utf8').digest('hex') !== sha) throw new Error('the report page inside this program is damaged; reinstall spentdiff');\n" +
     '  return t;\n' +
     '}\n';
 }
@@ -1412,7 +1412,7 @@ export function versionModuleSource(cliSrc, version) {
  * documentation pages cited in price tables and copy. Nothing is ever fetched from them.
  */
 export const URL_ALLOWLIST = Object.freeze([
-  'https://github.com/0xelitesystem/auditrail',
+  'https://github.com/0xelitesystem/spentdiff',
   'https://elitesystem.ai',
   'https://platform.claude.com/docs/',
   'https://code.claude.com/docs/',
@@ -1423,7 +1423,7 @@ export const URL_ALLOWLIST = Object.freeze([
 ]);
 
 /** Anchors the report HTML may carry (the footer). */
-export const ANCHOR_ALLOWLIST = Object.freeze(['https://github.com/0xelitesystem/auditrail', 'https://elitesystem.ai/']);
+export const ANCHOR_ALLOWLIST = Object.freeze(['https://github.com/0xelitesystem/spentdiff', 'https://elitesystem.ai/']);
 
 const FORBIDDEN = Object.freeze([
   ['fetch(', /\bfetch\s*\(/],
@@ -1466,7 +1466,7 @@ export function scanForNetwork(text) {
  * ---------------------------------------------------------------------------------------- */
 
 /**
- * Build dist/auditrail.mjs and dist/auditrail.html.
+ * Build dist/spentdiff.mjs and dist/spentdiff.html.
  * @param {{ root?: string, out?: string, htmlOut?: string|null, htmlOnly?: boolean, entry?: string, minify?: boolean, mangle?: boolean }} [opts]
  * @returns {{ out: string|null, bytes: number, sha256: string|null, htmlOut: string|null, htmlBytes: number, htmlSha256: string, modules: string[], cliTemplateSha256?: string }}
  */
@@ -1477,9 +1477,9 @@ export function build(opts = {}) {
   const htmlViolations = scanForNetwork(tpl.html);
   if (htmlViolations.length) throw new BuildError('report template fails the no-network scan:\n  ' + htmlViolations.join('\n  '));
   checkAnchors(tpl.html);
-  checkNotices(tpl.html, tpl.glyphs, 'dist/auditrail.html');
+  checkNotices(tpl.html, tpl.glyphs, 'dist/spentdiff.html');
 
-  const htmlOut = opts.htmlOut === null ? null : (opts.htmlOut ?? path.join(root, 'dist', 'auditrail.html'));
+  const htmlOut = opts.htmlOut === null ? null : (opts.htmlOut ?? path.join(root, 'dist', 'spentdiff.html'));
   const htmlSha256 = crypto.createHash('sha256').update(tpl.html, 'utf8').digest('hex');
   if (htmlOut) {
     fs.mkdirSync(path.dirname(htmlOut), { recursive: true });
@@ -1505,25 +1505,25 @@ export function build(opts = {}) {
   if (fs.existsSync(versionPath)) overrides.set(versionPath, versionModuleSource(fs.readFileSync(versionPath, 'utf8'), version));
   const res = bundle({ entry, target: 'node', root, overrides, minify: opts.minify, mangle: opts.mangle });
   const banner = '#!/usr/bin/env node\n' +
-    '// auditrail ' + version + '. Copyright (c) 2026 RBL Industries LLC. MIT License.\n' +
-    '// Single-file build: zero runtime dependencies, no network code. Source: https://github.com/0xelitesystem/auditrail\n' +
+    '// spentdiff ' + version + '. Copyright (c) 2026 RBL Industries LLC. MIT License.\n' +
+    '// Single-file build: zero runtime dependencies, no network code. Source: https://github.com/0xelitesystem/spentdiff\n' +
     '// Bundled: a glyph atlas pre-rasterized from the Inter typeface.\n' +
     '// Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)\n' +
     '// The atlas is used under the SIL Open Font License, Version 1.1, not under the MIT License.\n' +
     '// Full text: the NOTICE file shipped beside this one.\n' +
-    '// Auditrail is an independent project.\n' +
+    '// Spentdiff is an independent project.\n' +
     '// It is not affiliated with, endorsed by or sponsored by Anthropic or by any other company\n' +
     '// whose products it reads or whose names appear in it. All product names and trademarks are\n' +
     '// the property of their respective owners.\n';
   const code = banner + res.code;
   // The page inside this bundle is brotli-packed, so it was checked as cliHtml above; this is the
   // bundle's own banner. '' for the atlas: the packed bytes are not greppable here.
-  checkNotices(code, '', 'dist/auditrail.mjs');
+  checkNotices(code, '', 'dist/spentdiff.mjs');
   const violations = scanForNetwork(code);
   if (violations.length) throw new BuildError('dist fails the no-network scan:\n  ' + violations.join('\n  '));
   const bytes = Buffer.byteLength(code);
-  if (bytes > MAX_BUNDLE_BYTES) throw new BuildError('dist/auditrail.mjs is ' + bytes + ' bytes, over the ' + MAX_BUNDLE_BYTES + ' byte budget');
-  const out = opts.out ?? path.join(root, 'dist', 'auditrail.mjs');
+  if (bytes > MAX_BUNDLE_BYTES) throw new BuildError('dist/spentdiff.mjs is ' + bytes + ' bytes, over the ' + MAX_BUNDLE_BYTES + ' byte budget');
+  const out = opts.out ?? path.join(root, 'dist', 'spentdiff.mjs');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, code, { mode: 0o755 });
   return {
@@ -1536,7 +1536,7 @@ export function build(opts = {}) {
  * The notices every distributable HTML artifact must carry in its own bytes. The glyph atlas is
  * a derived form of the Inter typeface: OFL 1.1 clause 2 lets it be bundled and redistributed
  * only while each copy carries the copyright notice and the license, and its TERMINATION clause
- * voids the license if that condition is not met. dist/auditrail.mjs carries these in its
+ * voids the license if that condition is not met. dist/spentdiff.mjs carries these in its
  * banner and in src/core/card/glyphs.js; the HTML pages carry them from src/web/template.html.
  * Mirrors the NOTICE check scripts/build-glyphs.mjs makes at rasterization time.
  */

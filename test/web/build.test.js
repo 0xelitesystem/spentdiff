@@ -38,7 +38,7 @@ test('the page CSP is the exact DESIGN 8.8 policy and hashes the inlined app scr
 
 test('the page passes the no-network scan and carries only the footer anchors', () => {
   assert.deepEqual(scanForNetwork(tpl.html), []);
-  assert.deepEqual(checkAnchors(tpl.html).filter((h) => /^https?:/.test(h)), ['https://github.com/0xelitesystem/auditrail', 'https://elitesystem.ai/']);
+  assert.deepEqual(checkAnchors(tpl.html).filter((h) => /^https?:/.test(h)), ['https://github.com/0xelitesystem/spentdiff', 'https://elitesystem.ai/']);
   assert.ok(!tpl.html.includes('%%AR_'), 'an unfilled placeholder');
 });
 
@@ -116,7 +116,7 @@ test('loadTemplate never serves a page with a build placeholder; without a page 
   assert.equal(sourceReport.loadTemplate({ devTemplate: () => raw }), null);
   assert.equal(sourceReport.loadTemplate({ devTemplate: () => null }), null);
   const html = sourceReport.renderReport(makeSummary(), { template: null });
-  assert.ok(html.includes('<h1>AUDITRAIL</h1>') && html.includes("script-src &#39;none&#39;"));
+  assert.ok(html.includes('<h1>SPENTDIFF</h1>') && html.includes("script-src &#39;none&#39;"));
 });
 
 test('source checkout: the sandboxed scanner writes a report with the real app in it', () => {
@@ -124,7 +124,7 @@ test('source checkout: the sandboxed scanner writes a report with the real app i
   try {
     const out = path.join(dir, 'report.html');
     const env = { ...process.env, HOME: dir, USERPROFILE: dir };
-    for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'AUDITRAIL_DEBUG']) delete env[k];
+    for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'SPENTDIFF_DEBUG']) delete env[k];
     const cli = path.join(ROOT, 'src', 'node', 'cli.js');
     const fixture = path.join(ROOT, 'test', 'fixtures', 'golden-core', 'projects');
     const r = spawnSync(process.execPath, [cli, '--no-open', '--tz', 'UTC', '--dir', fixture, '--out', out], { env, encoding: 'utf8', timeout: 120_000, windowsHide: true });

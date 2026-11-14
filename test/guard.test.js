@@ -88,13 +88,13 @@ test('the built demo page still exposes its embedded data to the fixture guard',
 
 // The exemption above is only safe while the blocks it removes are BUILD OUTPUT FROM src, whose
 // credential prefixes are this project's own secret-detector table. Prove that, rather than
-// trusting it: every stripped block must appear verbatim inside dist/auditrail.html, which
+// trusting it: every stripped block must appear verbatim inside dist/spentdiff.html, which
 // scripts/build.mjs produced from src/web in the same run. The one exception is the ar-worker
 // block, which the CLI page deliberately leaves empty (scripts/build.mjs cliTemplate), so it is
 // asserted to be empty instead. A block that carried data from someone's disk could satisfy
 // neither, and would be back in scope of the credential scan.
 test('the demo page exemption covers only build output, never data', () => {
-  const DIST_PAGE = path.join(ROOT, 'dist', 'auditrail.html');
+  const DIST_PAGE = path.join(ROOT, 'dist', 'spentdiff.html');
   if (!ALL.includes(GENERATED_PAGE) || !fs.existsSync(DIST_PAGE)) return; // both are build outputs
   const dist = fs.readFileSync(DIST_PAGE, 'utf8');
   const page = read(GENERATED_PAGE);
@@ -102,7 +102,7 @@ test('the demo page exemption covers only build output, never data', () => {
   assert.ok(blocks.length >= 2, 'expected the glyph, worker and app blocks, got ' + blocks.length);
   const unaccounted = blocks.filter((b) => !dist.includes(b) && !/^<script[^>]*id="ar-worker"[^>]*><\/script>$/i.test(b));
   assert.deepEqual(unaccounted.map((b) => b.slice(0, 60)), [],
-    'a stripped block of docs/index.html is not in dist/auditrail.html. If you just rebuilt dist, run: node scripts/make-demo.mjs');
+    'a stripped block of docs/index.html is not in dist/spentdiff.html. If you just rebuilt dist, run: node scripts/make-demo.mjs');
   // And the strip is not silently removing the document: the markup, the footer notices and the
   // embedded Summary all stay in scope of the credential scan.
   const rest = scanText(GENERATED_PAGE);

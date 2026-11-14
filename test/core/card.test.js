@@ -37,7 +37,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const SIZES = ['landscape', 'portrait'];
 const THEMES = ['dark', 'light'];
 const PRICE_TABLE = { models: SAMPLE_TABLE_MODELS };
-const REPO_URL_TEXT = 'github.com/0xelitesystem/auditrail';
+const REPO_URL_TEXT = 'github.com/0xelitesystem/spentdiff';
 const NOW = Date.UTC(2026, 8, 14);
 
 /** A fictional weekday by hour prompt pattern: mornings, afternoons, late evenings, quiet weekends. */
@@ -807,7 +807,7 @@ test('footer: the not-paid note and the scan receipt (rule A28) are on the card 
     const footer = textOps(layoutCard(ps, size)).filter((o) => o.field === 'footer').map((o) => o.text).join(' ');
     assert.match(footer, /API-equivalent value at list prices as of 2026-09-14\./);
     assert.match(footer, /Not what I paid\./);
-    assert.match(footer, /Generated locally by auditrail \| github\.com\/0xelitesystem\/auditrail/);
+    assert.match(footer, /Generated locally by spentdiff \| github\.com\/0xelitesystem\/spentdiff/);
     assert.match(footer, /Scanned 2026-03-16 09:00 UTC, 12 files/);
   }
 });

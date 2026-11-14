@@ -27,7 +27,7 @@ const NODE = parseNodeVersion();
 // The built single file, in the installed layout.
 const PKG = tempDir();
 fs.copyFileSync(path.join(REPO, 'package.json'), path.join(PKG, 'package.json'));
-const BUNDLE = /** @type {string} */ (build({ out: path.join(PKG, 'dist', 'auditrail.mjs'), htmlOut: null }).out);
+const BUNDLE = /** @type {string} */ (build({ out: path.join(PKG, 'dist', 'spentdiff.mjs'), htmlOut: null }).out);
 
 // A root that holds only a copy of the preload: scanning it finds no logs, and it lets the
 // sandboxed child read the preload.
@@ -41,7 +41,7 @@ fs.copyFileSync(PRELOAD, PRELOAD_COPY);
  */
 function node(args, extraEnv = {}) {
   const env = { ...process.env, ...extraEnv };
-  for (const k of ['NODE_TEST_CONTEXT', 'CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'AUDITRAIL_DEBUG']) delete env[k];
+  for (const k of ['NODE_TEST_CONTEXT', 'CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'SPENTDIFF_DEBUG']) delete env[k];
   if (!('NODE_OPTIONS' in extraEnv)) delete env.NODE_OPTIONS;
   const r = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 120_000, windowsHide: true });
   return { status: r.status, stdout: r.stdout ?? '', stderr: r.stderr ?? '' };

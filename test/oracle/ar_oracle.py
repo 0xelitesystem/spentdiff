@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""auditrail cross-implementation oracle (stdlib only, integer money).
+"""spentdiff cross-implementation oracle (stdlib only, integer money).
 
 An independent Python implementation of the accounting rules, used to check the JavaScript
 implementation to the token and the nanodollar on every generated fixture. It shares no code

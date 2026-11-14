@@ -554,7 +554,7 @@ export function badgeText(id, ps) {
  */
 export function footerText(ps) {
   const label = ps.value.label === CUSTOM_VALUE_LABEL ? 'Value at custom rates' : 'API-equivalent value at list prices as of ' + ps.pricesAsOf;
-  return label + '. ' + NOT_PAID_NOTE + ' Generated locally by auditrail | ' + REPO_DISPLAY;
+  return label + '. ' + NOT_PAID_NOTE + ' Generated locally by spentdiff | ' + REPO_DISPLAY;
 }
 
 /**
@@ -616,7 +616,7 @@ export function buildManifest(ps) {
  * @returns {string}
  */
 export function altText(ps) {
-  return 'Auditrail card. ' + buildManifest(ps).map((e) => e.text).join('. ') + '.';
+  return 'Spentdiff card. ' + buildManifest(ps).map((e) => e.text).join('. ') + '.';
 }
 
 /**

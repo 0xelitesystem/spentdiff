@@ -432,7 +432,7 @@ export function aggregateToJson(agg) {
 
 /**
  * Value of the golden-core fixture under each counting method (DESIGN 4.3, 9.4). The same
- * function feeds `auditrail audit --methods` and the README ratio table.
+ * function feeds `spentdiff audit --methods` and the README ratio table.
  *
  * @typedef {Object} MethodsDiagnostics
  * @property {bigint} correct         rules A1 to A33
@@ -451,7 +451,7 @@ export function aggregateToJson(agg) {
  * @property {'win32'|'posix'|'auto'} pathStyle
  * @property {PriceTable} prices
  * @property {PriceOverrides|null} overrides
- * @property {{ prefix: string, label: string }[]} projectRules   ~/.auditrail/projects.json (rule A29)
+ * @property {{ prefix: string, label: string }[]} projectRules   ~/.spentdiff/projects.json (rule A29)
  * @property {number|null} since   epoch ms, inclusive (--since)
  * @property {number|null} until   epoch ms, exclusive (--until)
  */

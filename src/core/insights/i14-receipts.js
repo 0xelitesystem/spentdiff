@@ -14,7 +14,7 @@ import { displayNameFor, makeLabeler, sortTools } from './_util.js';
 
 export const LINES_WRITTEN_LABEL = 'lines written by agent tool calls, not lines that survived';
 
-export const ACTION_RECEIPTS = 'Export these with auditrail export --md or --json; the method notes travel with the numbers.';
+export const ACTION_RECEIPTS = 'Export these with spentdiff export --md or --json; the method notes travel with the numbers.';
 
 export const insight = defineInsight({
   id: 'i14',

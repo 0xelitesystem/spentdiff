@@ -7,7 +7,7 @@
 // CSP violations and page errors fail it too. Covered:
 // - a report the built CLI wrote, opened over file://: it renders, Save card downloads a PNG,
 //   Save copy downloads a page that reopens and renders;
-// - drop mode of dist/auditrail.html over file://: synthetic logs fed by setInputFiles to the
+// - drop mode of dist/spentdiff.html over file://: synthetic logs fed by setInputFiles to the
 //   webkitdirectory input are scanned in the Web Worker, and the value matches the CLI's;
 // - a simulated drop onto the drop zone;
 // - the live demo shape (the page with a synthetic Summary in ar-demo) served over
@@ -51,7 +51,7 @@ const embed = (json) => json.replace(/</g, '\\u003c').replace(/>/g, '\\u003e').r
 before(async () => {
   if (skip) return;
   fs.copyFileSync(path.join(REPO, 'package.json'), path.join(WORK, 'package.json'));
-  const res = build({ out: path.join(WORK, 'dist', 'auditrail.mjs'), htmlOut: path.join(WORK, 'dist', 'auditrail.html') });
+  const res = build({ out: path.join(WORK, 'dist', 'spentdiff.mjs'), htmlOut: path.join(WORK, 'dist', 'spentdiff.html') });
   BUNDLE = /** @type {string} */ (res.out);
   PAGE = /** @type {string} */ (res.htmlOut);
   REPORT = path.join(WORK, 'report.html');

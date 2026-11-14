@@ -179,7 +179,7 @@ test('small helpers', () => {
     [['2026-03-01', '5'], ['2026-03-02', '0'], ['2026-03-03', '7']]);
   assert.equal(progressText({ bytesDone: 1_500_000, totalBytes: 12_000_000, filesDone: 3, totalFiles: 40 }), 'Read 1.5 MB of 12.0 MB (3 of 40 files).');
   assert.equal(isSummary(makeSummary()), true);
-  assert.equal(isSummary({ kind: 'auditrail.summary', schema: 2, insights: {} }), false);
+  assert.equal(isSummary({ kind: 'spentdiff.summary', schema: 2, insights: {} }), false);
   assert.equal(isSummary(null), false);
   assert.deepEqual(Object.keys(HIDE_LABELS).sort(), Object.keys(CARD_HIDE_KEYS).sort());
 });

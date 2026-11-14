@@ -23,11 +23,11 @@ import {
 } from '../../scripts/build.mjs';
 import { REPO, FIXTURES, CLI, tempDir } from '../node/helpers.js';
 
-// The installed package layout: <pkg>/dist/auditrail.mjs next to <pkg>/package.json (the
+// The installed package layout: <pkg>/dist/spentdiff.mjs next to <pkg>/package.json (the
 // program reads its version from there).
 const OUT = tempDir();
 fs.copyFileSync(path.join(REPO, 'package.json'), path.join(OUT, 'package.json'));
-const built = build({ out: path.join(OUT, 'dist', 'auditrail.mjs'), htmlOut: path.join(OUT, 'dist', 'auditrail.html') });
+const built = build({ out: path.join(OUT, 'dist', 'spentdiff.mjs'), htmlOut: path.join(OUT, 'dist', 'spentdiff.html') });
 const BUNDLE = /** @type {string} */ (built.out);
 const CODE = fs.readFileSync(BUNDLE, 'utf8');
 const PAGE = fs.readFileSync(/** @type {string} */ (built.htmlOut), 'utf8');
@@ -63,7 +63,7 @@ function embeddedPage() {
  */
 function run(program, args, home) {
   const env = { ...process.env, HOME: home, USERPROFILE: home };
-  for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'AUDITRAIL_DEBUG']) delete env[k];
+  for (const k of ['CLAUDE_CONFIG_DIR', 'XDG_CONFIG_HOME', 'NODE_OPTIONS', 'NODE_TEST_CONTEXT', 'SPENTDIFF_DEBUG']) delete env[k];
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [program, ...args], { env, windowsHide: true });
     let stdout = '';
@@ -166,7 +166,7 @@ async function outcome(program, root, cmd) {
 }
 
 test('dist is one file under the 400 KB budget and imports only harmless node: builtins', () => {
-  assert.ok(built.bytes <= MAX_BUNDLE_BYTES, 'dist/auditrail.mjs is ' + built.bytes + ' bytes');
+  assert.ok(built.bytes <= MAX_BUNDLE_BYTES, 'dist/spentdiff.mjs is ' + built.bytes + ' bytes');
   assert.equal(Buffer.byteLength(CODE), built.bytes);
   assert.ok(CODE.startsWith('#!/usr/bin/env node\n'));
   const imports = [...CODE.matchAll(/^import\b.*$/gm)].map((m) => m[0]);
@@ -183,7 +183,7 @@ test('layer (a): the static scan passes on the bundle, the standalone page and t
   assert.equal(sha, built.cliTemplateSha256);
   assert.equal(html, cliTemplate(PAGE), 'the embedded page is the standalone page without the drop-mode worker');
   assert.deepEqual(scanForNetwork(html), []);
-  assert.deepEqual(checkAnchors(html).filter((h) => /^https?:/.test(h)), ['https://github.com/0xelitesystem/auditrail', 'https://elitesystem.ai/']);
+  assert.deepEqual(checkAnchors(html).filter((h) => /^https?:/.test(h)), ['https://github.com/0xelitesystem/spentdiff', 'https://elitesystem.ai/']);
   // The worker block of the standalone page holds the drop-mode scanner; the embedded one is empty.
   assert.ok(/<script type="text\/plain" id="ar-worker">\n\(function/.test(PAGE));
   assert.ok(html.includes('<script type="text/plain" id="ar-worker"></script>'));
@@ -272,10 +272,10 @@ test('the bundle carries its version: a copy without package.json reports it, ne
   assert.ok(!fs.existsSync(path.join(dir, 'package.json')) && !fs.existsSync(path.join(dir, 'loose', 'package.json')));
   const r = await run(lone, ['--version'], dir);
   assert.equal(r.status, 0, r.stderr);
-  assert.equal(r.stdout.trim(), 'auditrail ' + version);
+  assert.equal(r.stdout.trim(), 'spentdiff ' + version);
   // The installed layout still reads the same version.
   const inst = await run(BUNDLE, ['--version'], dir);
-  assert.equal(inst.stdout.trim(), 'auditrail ' + version);
+  assert.equal(inst.stdout.trim(), 'spentdiff ' + version);
 });
 
 test('versionModuleSource replaces the one fallback and refuses anything else', () => {

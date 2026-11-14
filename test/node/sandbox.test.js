@@ -52,7 +52,7 @@ test('status line: the strong network claim only on Node 25 and later with net a
 });
 
 test('buildSandboxArgs: scoped reads and writes, never net, child process, worker or addons', () => {
-  const entry = path.resolve('/pkg/dist/auditrail.mjs');
+  const entry = path.resolve('/pkg/dist/spentdiff.mjs');
   const args = buildSandboxArgs({
     entryFile: entry,
     readPaths: [path.resolve('/r1/projects'), path.resolve('/r2/projects'), path.resolve('/r1/projects')],
@@ -72,14 +72,14 @@ test('buildSandboxArgs: scoped reads and writes, never net, child process, worke
 });
 
 test('programReadPaths: one file when bundled; from a checkout the src folder, package.json and the build script that builds the report page (trap 8)', () => {
-  const bundled = path.resolve('/pkg/dist/auditrail.mjs');
+  const bundled = path.resolve('/pkg/dist/spentdiff.mjs');
   assert.deepEqual(programReadPaths(bundled), [bundled]);
   const src = path.resolve('/pkg/src/node/cli.js');
   assert.deepEqual(programReadPaths(src), [path.resolve('/pkg/src'), path.resolve('/pkg/package.json'), path.resolve('/pkg/scripts/build.mjs')]);
 });
 
 test('buildSandboxArgs: the scanner runs with a capped V8 young generation (DESIGN 8.6 memory budget)', () => {
-  const entry = path.resolve('/pkg/dist/auditrail.mjs');
+  const entry = path.resolve('/pkg/dist/spentdiff.mjs');
   const args = buildSandboxArgs({ entryFile: entry, readPaths: [], writePaths: [], childArgs: [], version: V('25.9.0') });
   assert.equal(SCANNER_SEMI_SPACE_MB, 4);
   assert.deepEqual(args.slice(0, 2), ['--permission', '--max-semi-space-size=4']);

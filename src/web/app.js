@@ -138,7 +138,7 @@ function res(s, id) {
  */
 export function isSummary(x) {
   const s = /** @type {any} */ (x);
-  return !!s && typeof s === 'object' && s.kind === 'auditrail.summary' && s.schema === 1 && !!s.insights && typeof s.insights === 'object';
+  return !!s && typeof s === 'object' && s.kind === 'spentdiff.summary' && s.schema === 1 && !!s.insights && typeof s.insights === 'object';
 }
 
 /**
@@ -552,7 +552,7 @@ function i11(s) {
   const rest = all.filter((f) => f.severity !== 'critical');
   if (crit.length) out.push(table(cols, crit.map(row), 'Critical secrets'));
   if (rest.length) out.push(details('Likely test values and public third-party keys (' + int(rest.length) + ')', table(cols, rest.map(row), 'Other secret findings')));
-  out.push(note('Values are never shown, stored or exported. The fingerprint is the first 12 hex characters of the SHA-256 of the value, so you can match copies without seeing it. auditrail secrets --locations lists the session files, in the terminal only.'));
+  out.push(note('Values are never shown, stored or exported. The fingerprint is the first 12 hex characters of the SHA-256 of the value, so you can match copies without seeing it. spentdiff secrets --locations lists the session files, in the terminal only.'));
   return out.join('');
 }
 
@@ -599,7 +599,7 @@ function i14(s) {
   const models = arr(x.models);
   if (models.length) rows.push(['Models', models.join(', ')]);
   rows.push(['API-equivalent value', usd(x.totalNano)]);
-  return receipt(rows, 'Activity receipts') + note('auditrail export --md or --json writes these with their method notes.');
+  return receipt(rows, 'Activity receipts') + note('spentdiff export --md or --json writes these with their method notes.');
 }
 
 /** @param {any} s @returns {string} */
@@ -729,7 +729,7 @@ function banners(s, ctx) {
     out.push('<div class="banner risk" role="note"><p><strong>History at risk.</strong> ' + esc(i12Headline(s)) + ' <a href="#f-i12">What to do</a></p></div>');
   }
   const stale = num(obj(s.pricing).staleDays);
-  if (stale > PRICE_TABLE_STALE_DAYS) out.push('<div class="banner risk" role="note"><p>The bundled price table is ' + esc(int(stale)) + ' days old. List prices may have changed; update auditrail for a newer table.</p></div>');
+  if (stale > PRICE_TABLE_STALE_DAYS) out.push('<div class="banner risk" role="note"><p>The bundled price table is ' + esc(int(stale)) + ' days old. List prices may have changed; update spentdiff for a newer table.</p></div>');
   return '<div class="wrap">' + out.join('') + '</div>';
 }
 
@@ -769,7 +769,7 @@ function cardSection(card) {
  */
 export function reportHtml(s, ctx, card = { hide: new Set(), include: new Set(), size: 'landscape', theme: 'dark' }) {
   const shown = (/** @type {string} */ id) => res(s, id).shown;
-  const top = '<header class="topbar"><div class="wrap"><span class="wordmark">AUDITRAIL</span>' +
+  const top = '<header class="topbar"><div class="wrap"><span class="wordmark">SPENTDIFF</span>' +
     '<nav class="topnav" aria-label="Sections">' +
     [['#fix-list', 'Fix list'], ['#value', 'Value'], ['#money', 'Money map'], ['#fixes', 'Tools'], ['#patterns', 'Patterns'], ['#safety', 'Secrets'], ['#card', 'Card'], ['#receipts', 'Receipts']]
       .map(([h, l]) => '<a href="' + h + '">' + esc(l) + '</a>').join('') + '</nav>' +
@@ -829,7 +829,7 @@ export function reportHtml(s, ctx, card = { hide: new Set(), include: new Set(),
 export function dropHtml(o) {
   const tabs = /** @type {('windows'|'mac'|'linux')[]} */ (['windows', 'mac', 'linux']);
   const help = OS_HELP[o.os];
-  return '<header class="topbar"><div class="wrap"><span class="wordmark">AUDITRAIL</span></div></header>' +
+  return '<header class="topbar"><div class="wrap"><span class="wordmark">SPENTDIFF</span></div></header>' +
     '<main class="wrap" id="ar-main-content">' +
     '<section class="drop-hero"><h1>Your coding agent\'s year, computed on this page.</h1>' +
     '<p>Drop your Claude Code projects folder. Everything runs in this tab: the page has no network permission (its Content Security Policy blocks every connection), so nothing is uploaded anywhere.</p></section>' +
@@ -909,8 +909,8 @@ function boot() {
     showDrop(null);
   } else {
     showFatal(data && typeof data === 'object' && typeof data.schema === 'number' && data.schema > 1
-      ? 'This report was written by a newer version of auditrail. Open it with that version.'
-      : 'The data embedded in this page could not be read. Run auditrail again to write a fresh report.');
+      ? 'This report was written by a newer version of spentdiff. Open it with that version.'
+      : 'The data embedded in this page could not be read. Run spentdiff again to write a fresh report.');
   }
 }
 
@@ -1043,7 +1043,7 @@ async function pickDirectory() {
   const w = /** @type {any} */ (window);
   let dir;
   try {
-    dir = await w.showDirectoryPicker({ id: 'auditrail-projects', mode: 'read' });
+    dir = await w.showDirectoryPicker({ id: 'spentdiff-projects', mode: 'read' });
   } catch (e) {
     if (e && e.name === 'AbortError') return;
     pickInput();
@@ -1112,7 +1112,7 @@ function dropError(message) {
 /** @param {{ path: string, file: File|null }[]} entries */
 function startScan(entries) {
   const src = $('ar-worker') ? String($('ar-worker').textContent || '') : '';
-  if (!src.trim() || src.trim().startsWith('/*')) { dropError('This copy of the page has no scanner built in. Run npm run build, or use the auditrail command.'); return; }
+  if (!src.trim() || src.trim().startsWith('/*')) { dropError('This copy of the page has no scanner built in. Run npm run build, or use the spentdiff command.'); return; }
   if (!entries.some((x) => x.file)) { dropError('No Claude Code logs (.jsonl files) in that folder. Choose the projects folder inside .claude.'); return; }
   state.mode = 'scanning';
   setBusy('Starting the scanner...');
@@ -1123,7 +1123,7 @@ function startScan(entries) {
     worker = new Worker(url);
   } catch {
     if (url) URL.revokeObjectURL(url);
-    dropError('This browser would not start the in-page scanner. Use the auditrail command instead: npx auditrail');
+    dropError('This browser would not start the in-page scanner. Use the spentdiff command instead: npx spentdiff');
     return;
   }
   state.worker = worker;
@@ -1149,7 +1149,7 @@ function startScan(entries) {
   worker.onerror = (/** @type {ErrorEvent} */ ev) => {
     ev.preventDefault();
     cleanup();
-    dropError('The in-page scanner failed to start or crashed. Use the auditrail command instead: npx auditrail');
+    dropError('The in-page scanner failed to start or crashed. Use the spentdiff command instead: npx spentdiff');
   };
   const tz = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { return 'UTC'; } })();
   worker.postMessage({ type: 'scan', entries, tz, idleMinutes: 15, nowMs: Date.now() });
@@ -1255,14 +1255,14 @@ function drawCard() {
   } catch (e) {
     state.raster = null;
     if (save) save.disabled = true;
-    if (status) status.textContent = 'The card could not be drawn here (' + (e instanceof Error ? e.name : 'error') + '). The auditrail card command draws the same card.';
+    if (status) status.textContent = 'The card could not be drawn here (' + (e instanceof Error ? e.name : 'error') + '). The spentdiff card command draws the same card.';
   }
 }
 
 function saveCard() {
   const canvas = /** @type {HTMLCanvasElement|null} */ ($('ar-card-canvas'));
   if (!canvas || !state.raster) return;
-  const name = 'auditrail-card-' + state.card.size + '-' + state.card.theme + '.png';
+  const name = 'spentdiff-card-' + state.card.size + '-' + state.card.theme + '.png';
   canvas.toBlob((blob) => { if (blob) download(blob, name); }, 'image/png');
 }
 
@@ -1293,7 +1293,7 @@ function saveCopy() {
   const safe = state.shareSafe || state.locked;
   const summary = safe ? (state.locked ? state.original : shareSafeSummary(state.original)) : state.original;
   const stamp = String(summary.generatedAt || '').slice(0, 10) || 'report';
-  download(new Blob([pageWith(summary)], { type: 'text/html' }), 'auditrail-' + stamp + (safe ? '-share-safe' : '') + '.html');
+  download(new Blob([pageWith(summary)], { type: 'text/html' }), 'spentdiff-' + stamp + (safe ? '-share-safe' : '') + '.html');
 }
 
 /**

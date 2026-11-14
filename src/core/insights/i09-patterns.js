@@ -13,7 +13,7 @@ import { roundTo, median, percentile, weekdayMon0 } from './_util.js';
 /** Local hours that count as night for the Night Shift badge (20:00 to 04:59). */
 export const NIGHT_HOURS = Object.freeze([20, 21, 22, 23, 0, 1, 2, 3, 4]);
 
-export const ACTION_PATTERNS = 'Use these figures, with their method notes, as receipts in a portfolio or review (auditrail export --md).';
+export const ACTION_PATTERNS = 'Use these figures, with their method notes, as receipts in a portfolio or review (spentdiff export --md).';
 
 export const insight = defineInsight({
   id: 'i09',

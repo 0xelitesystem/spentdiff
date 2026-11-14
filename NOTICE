@@ -1,8 +1,8 @@
-auditrail
+spentdiff
 Copyright (c) 2026 RBL Industries LLC
 Licensed under the MIT License. See LICENSE.
 
-auditrail has zero runtime dependencies. Third-party material that is
+spentdiff has zero runtime dependencies. Third-party material that is
 bundled into dist/ (for example the font glyph atlas used by the share card)
 is listed below together with its license text.
 

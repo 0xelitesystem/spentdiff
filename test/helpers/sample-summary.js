@@ -27,8 +27,8 @@ function ins(id, data, shown = true) {
 export function makeSummary() {
   return {
     schema: 1,
-    kind: 'auditrail.summary',
-    tool: { name: 'auditrail', version: '0.1.0' },
+    kind: 'spentdiff.summary',
+    tool: { name: 'spentdiff', version: '0.1.0' },
     generatedAt: '2026-03-16T09:00:00.000Z',
     tz: 'UTC',
     idleMinutes: 15,

@@ -90,7 +90,7 @@ export function defaultIo() {
 
 /**
  * The package.json next to the program: `<pkg>/package.json` for both the bundle
- * (`<pkg>/dist/auditrail.mjs`) and a source checkout (`<pkg>/src/node/cli.js`).
+ * (`<pkg>/dist/spentdiff.mjs`) and a source checkout (`<pkg>/src/node/cli.js`).
  * @param {string} entryFile
  * @param {(p: string) => string} [readText]
  * @returns {{ version: string, packageJson: string|null }}
@@ -100,7 +100,7 @@ export function readToolVersion(entryFile, readText = (p) => fs.readFileSync(p, 
   for (const p of [path.join(dir, '..', 'package.json'), path.join(dir, '..', '..', 'package.json')]) {
     try {
       const j = JSON.parse(readText(p));
-      if (j && j.name === 'auditrail' && typeof j.version === 'string' && /^[0-9A-Za-z.+-]{1,40}$/.test(j.version)) {
+      if (j && j.name === 'spentdiff' && typeof j.version === 'string' && /^[0-9A-Za-z.+-]{1,40}$/.test(j.version)) {
         return { version: j.version, packageJson: path.resolve(p) };
       }
     } catch { /* not this one */ }
@@ -109,30 +109,30 @@ export function readToolVersion(entryFile, readText = (p) => fs.readFileSync(p, 
 }
 
 /**
- * The user's optional files under ~/.auditrail (DESIGN 5.2, rule A29).
+ * The user's optional files under ~/.spentdiff (DESIGN 5.2, rule A29).
  * @param {string} home
  * @returns {{ prices: string, projects: string }}
  */
 export function userFiles(home) {
-  const dir = path.join(home, '.auditrail');
+  const dir = path.join(home, '.spentdiff');
   return { prices: path.join(dir, 'prices.json'), projects: path.join(dir, 'projects.json') };
 }
 
 /**
- * Default output file for a command, under ~/.auditrail/reports (DESIGN 8.2).
+ * Default output file for a command, under ~/.spentdiff/reports (DESIGN 8.2).
  * @param {import('./args.js').CliOptions} o
  * @param {string} home
  * @param {Date} now
  * @returns {string|null}
  */
 export function defaultOutPath(o, home, now) {
-  const dir = path.join(home, '.auditrail', 'reports');
+  const dir = path.join(home, '.spentdiff', 'reports');
   const stamp = localStamp(now);
   if (o.command === 'report') return defaultReportPath(home, now);
-  if (o.command === 'card') return path.join(dir, 'auditrail-card-' + stamp + '-' + o.size + '-' + o.theme + '.png');
+  if (o.command === 'card') return path.join(dir, 'spentdiff-card-' + stamp + '-' + o.size + '-' + o.theme + '.png');
   if (o.command === 'export') {
-    if (o.format === 'json') return path.join(dir, 'auditrail-summary-' + stamp + '.json');
-    return path.join(dir, 'auditrail-by-' + o.by + '-' + stamp + '.' + (o.format ?? 'csv'));
+    if (o.format === 'json') return path.join(dir, 'spentdiff-summary-' + stamp + '.json');
+    return path.join(dir, 'spentdiff-by-' + o.by + '-' + stamp + '.' + (o.format ?? 'csv'));
   }
   return null;
 }
@@ -287,8 +287,8 @@ export async function main(argv = process.argv.slice(2), ioOverrides = {}) {
     o = parseCli(argv);
   } catch (e) {
     if (e instanceof UsageError) {
-      io.err('auditrail: ' + e.message);
-      io.err('Run auditrail --help for usage.');
+      io.err('spentdiff: ' + e.message);
+      io.err('Run spentdiff --help for usage.');
       return 2;
     }
     throw e;
@@ -299,7 +299,7 @@ export async function main(argv = process.argv.slice(2), ioOverrides = {}) {
     return 0;
   }
   if (o.command === 'version') {
-    io.out('auditrail ' + version);
+    io.out('spentdiff ' + version);
     return 0;
   }
   return o.child ? runScanner(o, io, version) : runLauncher(o, io, version, packageJson);
@@ -315,7 +315,7 @@ export async function main(argv = process.argv.slice(2), ioOverrides = {}) {
 async function runLauncher(o, io, version, packageJson) {
   const ver = parseNodeVersion(io.nodeVersion);
   if (ver.major < MIN_NODE_MAJOR) {
-    io.err('auditrail needs Node ' + MIN_NODE_MAJOR + ' or later (this is Node ' + ver.major + ').');
+    io.err('spentdiff needs Node ' + MIN_NODE_MAJOR + ' or later (this is Node ' + ver.major + ').');
     return 1;
   }
   /** @type {LaunchPlan} */
@@ -324,7 +324,7 @@ async function runLauncher(o, io, version, packageJson) {
     plan = planLaunch(o, io, { packageJson });
   } catch (e) {
     if (e instanceof UsageError) {
-      io.err('auditrail: ' + e.message);
+      io.err('spentdiff: ' + e.message);
       return 2;
     }
     throw e;
@@ -335,17 +335,17 @@ async function runLauncher(o, io, version, packageJson) {
     return 0;
   }
 
-  io.out('auditrail ' + version);
+  io.out('spentdiff ' + version);
   if (!plan.roots.length) {
     io.out('No Claude Code logs found. Pass the projects folder with --dir <path>.');
     if (io.platform === 'win32') io.out(wslHint());
     return 1;
   }
 
-  // Folders this tool creates under ~/.auditrail hold the report, the exports and the ledger,
+  // Folders this tool creates under ~/.spentdiff hold the report, the exports and the ledger,
   // so they are owner-only. A folder the user named with --out is theirs: it is created with the
   // platform default, and only the file written into it is owner-only.
-  const ownDir = path.join(io.home, '.auditrail');
+  const ownDir = path.join(io.home, '.spentdiff');
   const isOwnDir = (/** @type {string} */ d) => d === ownDir || d.startsWith(ownDir + path.sep);
   if (plan.out) {
     const d = path.dirname(plan.out);
@@ -355,7 +355,7 @@ async function runLauncher(o, io, version, packageJson) {
 
   const code = await io.run(io.execPath, plan.args);
   if (code !== 0) {
-    io.err('auditrail: the scanner exited with code ' + code + '.');
+    io.err('spentdiff: the scanner exited with code ' + code + '.');
     return code;
   }
   if (o.command === 'report' && plan.out) {
@@ -461,7 +461,7 @@ async function runScanner(o, io, version) {
       io.out('ledger folder ' + dir + ' (counts and token totals, plus price-table model ids' +
         (o.rememberLabels ? ' and the project labels you asked for' : '') +
         ': no paths, prompts, titles, secrets or raw session ids)');
-      io.out('To keep it current, add this SessionEnd hook to your Claude Code settings.json yourself (auditrail never installs it):');
+      io.out('To keep it current, add this SessionEnd hook to your Claude Code settings.json yourself (spentdiff never installs it):');
       for (const line of hookSnippet().split('\n')) io.out(line);
       return 0;
     }
@@ -513,12 +513,12 @@ async function runScanner(o, io, version) {
     return 0;
   } catch (e) {
     if (e instanceof UsageError) {
-      io.err('auditrail: ' + e.message);
+      io.err('spentdiff: ' + e.message);
       return 2;
     }
     const code = e && typeof e === 'object' && 'code' in e && typeof e.code === 'string' ? ' [' + e.code + ']' : '';
-    io.err('auditrail: scan failed' + code + ': ' + safeMessage(e, roots));
-    if (io.env.AUDITRAIL_DEBUG === '1' && e instanceof Error && e.stack) {
+    io.err('spentdiff: scan failed' + code + ': ' + safeMessage(e, roots));
+    if (io.env.SPENTDIFF_DEBUG === '1' && e instanceof Error && e.stack) {
       for (const line of e.stack.split(/\r?\n/).slice(1, 12)) io.err(safeMessage(line, roots));
     }
     return 1;
@@ -542,7 +542,7 @@ if (isMainModule()) {
   main().then(
     (code) => { process.exitCode = code; },
     (e) => {
-      process.stderr.write('auditrail: unexpected error: ' + safeMessage(e) + '\n');
+      process.stderr.write('spentdiff: unexpected error: ' + safeMessage(e) + '\n');
       process.exitCode = 1;
     },
   );

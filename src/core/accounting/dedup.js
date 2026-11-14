@@ -195,7 +195,7 @@ export function createDedup(files, opts = {}) {
       const f = files[ev.fileIdx];
       throw new TooManyResponsesError(
         'this scan holds more than ' + maxLive.toLocaleString('en-US') + ' distinct responses, which is more than ' +
-        'auditrail keeps in memory. The limit was reached while reading ' + (f && f.relPath ? f.relPath : 'a log file') +
+        'spentdiff keeps in memory. The limit was reached while reading ' + (f && f.relPath ? f.relPath : 'a log file') +
         '. Scan a smaller folder with --dir, or split the folder and run it twice.');
     }
   };

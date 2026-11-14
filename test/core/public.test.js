@@ -262,7 +262,7 @@ test('manifest lists exactly what the card shows, footer included', () => {
   assert.ok(!('heatmap' in byField));
   assert.ok(byField.footer.includes('as of 2026-09-14. Not what I paid.'));
   assert.equal(scanText(ps), 'Scanned 2026-03-16 09:00 UTC, 12 files');
-  assert.ok(altText(ps).startsWith('Auditrail card. '));
+  assert.ok(altText(ps).startsWith('Spentdiff card. '));
   const DASHES = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
   for (const e of m) assert.ok(!DASHES.test(e.text), 'no en or em dashes in card copy');
 });

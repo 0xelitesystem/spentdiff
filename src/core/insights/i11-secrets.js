@@ -15,7 +15,7 @@ import { SECRET_SEVERITIES, SECRET_SOURCES } from '../adapters/contract.js';
 import { SECRET_TYPE_IDS, compareGrouped } from '../secrets.js';
 import { localDate, projectLabeler } from './_util.js';
 
-export const ACTION_SECRETS = 'Rotate each critical key at its provider first, then delete every copy (auditrail secrets --locations lists the session files, in the terminal only), then add permission deny rules for secret files, for example "deny": ["Read(./.env)"]. For a deeper scan, see agent-leaks.';
+export const ACTION_SECRETS = 'Rotate each critical key at its provider first, then delete every copy (spentdiff secrets --locations lists the session files, in the terminal only), then add permission deny rules for secret files, for example "deny": ["Read(./.env)"]. For a deeper scan, see agent-leaks.';
 
 const FP_RE = /^[0-9a-f]{12}$/;
 

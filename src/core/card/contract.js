@@ -75,7 +75,7 @@ export const TEXT_ROLES = Object.freeze(['text', 'accent', 'secondary']);
 export const MIN_CONTRAST = 4.5;
 
 /** Wordmark, drawn in the accent color. */
-export const WORDMARK = 'AUDITRAIL';
+export const WORDMARK = 'SPENTDIFF';
 
 /**
  * @typedef {'landscape'|'portrait'} CardSize

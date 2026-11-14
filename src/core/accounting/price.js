@@ -53,7 +53,7 @@ function geo(m) {
 /**
  * Validate a user price override object (DESIGN 5.2, Claude Code modelPricing compatible)
  * and return a clean PriceOverrides. Throws a TypeError naming the first problem.
- * @param {unknown} obj   parsed JSON of ~/.auditrail/prices.json or --prices <file>
+ * @param {unknown} obj   parsed JSON of ~/.spentdiff/prices.json or --prices <file>
  * @param {string} fileName base name only (shown in the custom-rates label)
  * @returns {import('./contract.js').PriceOverrides}
  */

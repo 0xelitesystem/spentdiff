@@ -215,10 +215,10 @@ test('a file label inside the I12 retention advice is program text; the same lab
 });
 
 test('a project named after the product: kind, tool name and copy are program text, its label is not', () => {
-  const acc = redactedAcc({ labels: ['auditrail'] });
-  const clean = { redacted: true, kind: 'auditrail.summary', tool: { name: 'auditrail' }, insights: { i14: { action: ACTION_RECEIPTS }, i11: { action: ACTION_SECRETS + ' Critical copies on disk: 2.' } } };
+  const acc = redactedAcc({ labels: ['spentdiff'] });
+  const clean = { redacted: true, kind: 'spentdiff.summary', tool: { name: 'spentdiff' }, insights: { i14: { action: ACTION_RECEIPTS }, i11: { action: ACTION_SECRETS + ' Critical copies on disk: 2.' } } };
   assert.deepEqual(findSummaryLeaks(clean, acc), []);
-  const leaked = { ...clean, insights: { ...clean.insights, i01: { data: { byProject: [{ label: 'auditrail' }] } } } };
+  const leaked = { ...clean, insights: { ...clean.insights, i01: { data: { byProject: [{ label: 'spentdiff' }] } } } };
   assert.deepEqual(findSummaryLeaks(leaked, acc), [{ category: 'project label', path: '$.insights.i01.data.byProject[0].label' }]);
 });
 
