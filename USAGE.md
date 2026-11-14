@@ -534,6 +534,6 @@ network-touching tools and you need to know whether the connection or the code i
 Single-purpose tools that read the same transcripts, if you want one piece rather than the whole
 trail: [agent-cost](https://github.com/0xelitesystem/agent-cost),
 [agent-leaks](https://github.com/0xelitesystem/agent-leaks),
-[agent-receipts](https://github.com/0xelitesystem/agent-receipts),
-[agent-blast-radius](https://github.com/0xelitesystem/agent-blast-radius),
+[donediff](https://github.com/0xelitesystem/donediff),
+[cantundo](https://github.com/0xelitesystem/cantundo),
 [agent-trace-viewer](https://github.com/0xelitesystem/agent-trace-viewer).

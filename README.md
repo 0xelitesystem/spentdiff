@@ -244,8 +244,8 @@ Other things in this catalog that read the same transcripts, if you want one pie
 
 - [agent-cost](https://github.com/0xelitesystem/agent-cost) - retrospective token and cost forensics for a single session, with runaway-loop detection.
 - [agent-leaks](https://github.com/0xelitesystem/agent-leaks) - scan and redact leaked secrets sitting in your agent transcripts, which is the finding this tool only reports.
-- [agent-receipts](https://github.com/0xelitesystem/agent-receipts) - audit what your coding agent claimed against what it actually did.
-- [agent-blast-radius](https://github.com/0xelitesystem/agent-blast-radius) - reconstruct every irreversible action an agent took in a session.
+- [donediff](https://github.com/0xelitesystem/donediff) - audit what your coding agent claimed against what it actually did.
+- [cantundo](https://github.com/0xelitesystem/cantundo) - reconstruct every irreversible action an agent took in a session.
 - [agent-trace-viewer](https://github.com/0xelitesystem/agent-trace-viewer) - visualize agent tool-call traces as a flame graph.
 
 ## License
