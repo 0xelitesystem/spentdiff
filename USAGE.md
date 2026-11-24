@@ -532,8 +532,8 @@ cannot recompute. It is the one to reach for when finding i07 shows repeated tim
 network-touching tools and you need to know whether the connection or the code is the reason.
 
 Single-purpose tools that read the same transcripts, if you want one piece rather than the whole
-trail: [agent-cost](https://github.com/0xelitesystem/agent-cost),
-[agent-leaks](https://github.com/0xelitesystem/agent-leaks),
+trail: [agent-spend-retrospective](https://github.com/0xelitesystem/agent-spend-retrospective),
+[agent-transcript-redactor](https://github.com/0xelitesystem/agent-transcript-redactor),
 [donediff](https://github.com/0xelitesystem/donediff),
 [cantundo](https://github.com/0xelitesystem/cantundo),
-[agent-trace-viewer](https://github.com/0xelitesystem/agent-trace-viewer).
+[agent-trace-flamegraph](https://github.com/0xelitesystem/agent-trace-flamegraph).
