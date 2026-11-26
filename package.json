@@ -1,6 +1,6 @@
 {
   "name": "spentdiff",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Prices your coding-agent sessions at list, ranks what to fix, and scans them for leaked secrets, entirely on your own machine. API-equivalent value with receipts, a zero-token fix list and a privacy-safe share card. Runs 100% locally.",
   "type": "module",
   "bin": {
